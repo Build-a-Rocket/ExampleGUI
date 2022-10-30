@@ -43,6 +43,7 @@ namespace ExampleGUI
             this.realTimeChart1 = new ExampleGUI.RealTimeChart();
             this.realTimeChart2 = new ExampleGUI.RealTimeChart();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.panel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -195,6 +196,14 @@ namespace ExampleGUI
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer_Tick);
             // 
+            // serialPort
+            // 
+            this.serialPort.BaudRate = 2000000;
+            this.serialPort.DiscardNull = true;
+            this.serialPort.DtrEnable = true;
+            this.serialPort.RtsEnable = true;
+            this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.dataReceived);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -229,6 +238,7 @@ namespace ExampleGUI
         private RealTimeChart realTimeChart1;
         private RealTimeChart realTimeChart2;
         private System.Windows.Forms.Timer timer1;
+        private System.IO.Ports.SerialPort serialPort;
     }
 }
 

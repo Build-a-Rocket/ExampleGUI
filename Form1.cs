@@ -15,7 +15,6 @@ namespace ExampleGUI
     public partial class Form1 : Form
     {
         Random r;
-
         public Form1()
         {
             InitializeComponent();
@@ -28,6 +27,12 @@ namespace ExampleGUI
 
             realTimeChart2.AddChart("Points", "Number", "Random", SeriesChartType.FastLine);
             r = new Random();
+
+            try
+            {
+                serialPort.Open();
+            }
+            catch { }
         }
 
         private void loadFile_Clicked(object sender, EventArgs e)
@@ -47,8 +52,22 @@ namespace ExampleGUI
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            realTimeChart1.AddPoint(0, r.NextDouble(), "Random");
-            realTimeChart2.AddPoint(0, r.NextDouble(), "Random");
+            if (!serialPort.IsOpen)
+            {
+                realTimeChart1.AddPoint(0, r.NextDouble(), "Random");
+                realTimeChart2.AddPoint(0, r.NextDouble(), "Random");
+            }
+        }
+
+        private void dataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        {
+            string line = serialPort.ReadLine();
+            outputBox.AppendText(line);
+
+            string[] data = line.Split(',');
+
+            realTimeChart1.AddPoint(0, Convert.ToDouble(data[0]), "Random");
+            realTimeChart2.AddPoint(0, Convert.ToDouble(data[0]), "Random");
         }
     }
 }
